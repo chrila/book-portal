@@ -1,0 +1,9 @@
+// refresh state text
+txtState = document.querySelector("#book-state-" + "<%= @book.id %>");
+txtState.innerText = "<%= @book.state %>";
+// change reserve button text
+btReserve = document.querySelector("#bt-reserve-" + "<%= @book.id %>");
+btReserve.value = "<%= @book.reserved? ? 'Unreserve' : 'Reserve' %>"
+// highlight row if book is reserved
+row = document.querySelector("#row-book-" + "<%= @book.id %>");
+row.classList.toggle('book_reserved', <%= @book.reserved? %>);

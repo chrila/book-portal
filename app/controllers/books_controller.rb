@@ -20,6 +20,17 @@ class BooksController < ApplicationController
   end
 
   def reserve
+    if @book.reserved?
+      @book.unreserved!
+    else
+      @book.reserved!
+    end
+    
+    respond_to do |format|
+      if @book.save
+        format.js { render nothing: true, notice: 'Book was successfully reserved.' }
+      end
+    end
   end
 
   def pay
