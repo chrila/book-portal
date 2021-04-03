@@ -75,8 +75,6 @@ function setupTimer() {
 txtState.innerText = "<%= @book.state %>";
 txtUser.innerText = "<%= @book.user %>";
 
-console.log("<%= @book.state %>");
-
 // refresh texts and show/hide nodes based on status
 <% if @book.unreserved? %>
   txtTimeout.innerText = "";
