@@ -1,0 +1,23 @@
+// select nodes
+txtState = document.querySelector("#state-book-" + "<%= @book.id %>");
+btReserve = document.querySelector("#bt-reserve-" + "<%= @book.id %>");
+row = document.querySelector("#row-book-" + "<%= @book.id %>");
+txtTimeout = document.querySelector("#timeout-book-" + "<%= @book.id %>");
+txtUser = document.querySelector("#user-book-" + "<%= @book.id %>");
+btPay = document.querySelector("#bt-pay-" + "<%= @book.id %>");
+btUnpay = document.querySelector("#bt-unpay-" + "<%= @book.id %>");
+
+// refresh state text
+txtState.innerText = "<%= @book.state %>";
+txtUser.innerText = "<%= @book.user %>";
+
+console.log("<%= @book.state %>");
+
+// refresh texts and show/hide nodes based on status
+<% if @book.unreserved? %>
+  txtTimeout.innerText = "";
+  btReserve.innerText = "Reserve";
+  row.classList.remove("book_reserved");
+  btPay.innerText = "";
+  btUnpay.innerText = "";
+<% end %>

@@ -31,6 +31,27 @@ function displayTimer(timeout) {
   }
 }
 
+function getHeaders() {
+  let headers = new window.Headers({
+    'Accept': 'application/javascript',
+    'X-Requested-With': 'XMLHttpRequest'
+  })
+
+  const csrfToken = document.head.querySelector("[name='csrf-token']").getAttribute("content");
+  if (csrfToken) { headers.append('X-CSRF-Token', csrfToken); }
+
+  return headers
+}
+
+function createRequest(url, method = 'get') {
+  const request = new window.Request(url, {
+    headers: getHeaders(),
+    method: method,
+    credentials: 'same-origin'
+  })
+  return request
+}
+
 function setupTimer() {
   timeout = 15000;
   displayTimer(timeout);
@@ -41,13 +62,20 @@ function setupTimer() {
     if (txt) {
       txt.innerText = "Timeout expired :(";
     }
-    // TODO: unreserve book
+    // call book#unreserve via API
+    fetch(createRequest("books/" + "<%= @book.id %>" + "/unreserve", 'POST')).then(v => {
+      v.text().then(txt => {
+        eval(txt);
+      })
+    })
   }, timeout);
 }
 
 // refresh state text
 txtState.innerText = "<%= @book.state %>";
 txtUser.innerText = "<%= @book.user %>";
+
+console.log("<%= @book.state %>");
 
 // refresh texts and show/hide nodes based on status
 <% if @book.unreserved? %>
