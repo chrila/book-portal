@@ -3,26 +3,63 @@ txtState = document.querySelector("#state-book-" + "<%= @book.id %>");
 btReserve = document.querySelector("#bt-reserve-" + "<%= @book.id %>");
 row = document.querySelector("#row-book-" + "<%= @book.id %>");
 txtTimeout = document.querySelector("#timeout-book-" + "<%= @book.id %>");
+txtUser = document.querySelector("#user-book-" + "<%= @book.id %>");
 btPay = document.querySelector("#bt-pay-" + "<%= @book.id %>");
 btUnpay = document.querySelector("#bt-unpay-" + "<%= @book.id %>");
 
+function getTimeString(seconds) {
+  let mins = Math.floor(seconds / 60);
+  let secs = seconds - mins * 60;
+
+  return ("00" + mins).slice(-2) + ":" + ("00" + secs).slice(-2);
+}
+
+function displayTimer(timeout) {
+  let txtTimeout = document.querySelector("#timeout-book-" + "<%= @book.id %>");
+  let end = timeout/1000;
+
+  if (end > 0) {
+    let ticker = setInterval(function() {
+      end--;
+      if (end <= 0 || !txtTimeout) {
+        clearInterval(ticker);
+      } else {
+        txtTimeout.innerText = getTimeString(end);
+      }
+
+    }, 1000);
+  }
+}
+
+function setupTimer() {
+  timeout = 15000;
+  displayTimer(timeout);
+  txtTimeout.innerText = getTimeString(timeout / 1000);
+
+  setTimeout(function() {
+    let txt = document.querySelector("#timeout-book-" + "<%= @book.id %>");
+    if (txt) {
+      txt.innerText = "Timeout expired :(";
+    }
+    // TODO: unreserve book
+  }, timeout);
+}
+
 // refresh state text
 txtState.innerText = "<%= @book.state %>";
+txtUser.innerText = "<%= @book.user %>";
 
 // refresh texts and show/hide nodes based on status
 <% if @book.unreserved? %>
   txtTimeout.innerText = "";
-  btReserve.value = "Reserve";
+  btReserve.innerText = "Reserve";
   row.classList.remove("book_reserved");
-  btPay.classList.add("hidden");
-  btUnpay.classList.add("hidden");
+  btPay.innerText = "";
+  btUnpay.innerText = "";
 <% elsif @book.reserved? %>
-  txtTimeout.innerText = "15s";
-  btReserve.value = "Unreserve";
+  btReserve.innerText = "";
   row.classList.add("book_reserved");
-<% elsif @book.paid? %>
-  txtTimeout.innerText = "";
-  btReserve.classList.add("hidden");
-  btPay.classList.add("hidden");
-  btUnpay.classList.remove("hidden");
+  btPay.innerText = "Pay";
+  btUnpay.innerText = "";
+  setupTimer();
 <% end %>

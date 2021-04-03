@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: %i[ show edit update destroy reserve pay ]
+  before_action :set_book, only: %i[ show edit update destroy reserve pay unpay ]
 
   # GET /books or /books.json
   def index
@@ -25,8 +25,10 @@ class BooksController < ApplicationController
   def reserve
     if @book.reserved?
       @book.unreserved!
+      @book.user = current_user
     else
       @book.reserved!
+      @book.user = nil
     end
     
     respond_to do |format|
@@ -38,12 +40,22 @@ class BooksController < ApplicationController
 
   def pay
     @book.paid!
-    @book.save
+
+    respond_to do |format|
+      if @book.save
+        format.js
+      end
+    end
   end
 
   def unpay
     @book.unreserved!
-    @book.save
+
+    respond_to do |format|
+      if @book.save
+        format.js
+      end
+    end
   end
 
   # POST /books or /books.json

@@ -2,10 +2,12 @@
   <td><%= book.id %></td>
   <td><%= book.author %></td>
   <td><%= book.title %></td>
-  <td><%= book.user_id %></td>
+  <td id=<%= "user-book-#{book.id}" %>><%= book.user %></td>
   <td id=<%= "state-book-#{book.id}" %>><%= book.state %></td>
-  <td><%= button_to(book.reserved? ? 'Unreserve' : 'Reserve', reserve_book_path(book), id: "bt-reserve-#{book.id}", remote: true) %></td>
-  <td><%= button_to('Pay', pay_book_path(book), id: "bt-pay-#{book.id}", remote: true, class: !book.reserved? ? 'hidden' : '') %></td>
-  <td><%= button_to('Return', unpay_book_path(book), id: "bt-unpay-#{book.id}", remote: true, data: { confirm: 'Are you sure?' }, class: !book.paid? ? 'hidden' : '') %></td>
+  <td>
+    <%= link_to(book.unreserved? ? 'Reserve' : '', reserve_book_path(book), id: "bt-reserve-#{book.id}", remote: true, method: :post) %>
+    <%= link_to('', pay_book_path(book), id: "bt-pay-#{book.id}", remote: true, method: :post) %>
+    <%= link_to(book.paid? ? 'Return' : '', unpay_book_path(book), id: "bt-unpay-#{book.id}", remote: true, method: :post, data: { confirm: 'Are you sure?' }) %>
+  </td>
   <td id=<%= "timeout-book-#{book.id}" %>></td>
 </tr>

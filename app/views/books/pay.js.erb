@@ -1,0 +1,18 @@
+// select nodes
+txtState = document.querySelector("#state-book-" + "<%= @book.id %>");
+btReserve = document.querySelector("#bt-reserve-" + "<%= @book.id %>");
+row = document.querySelector("#row-book-" + "<%= @book.id %>");
+txtTimeout = document.querySelector("#timeout-book-" + "<%= @book.id %>");
+btPay = document.querySelector("#bt-pay-" + "<%= @book.id %>");
+btUnpay = document.querySelector("#bt-unpay-" + "<%= @book.id %>");
+
+txtState.innerText = "<%= @book.state %>";
+
+<% if @book.paid? %>
+  txtTimeout.remove();
+  btReserve.innerText = "";
+  btPay.innerText = "";
+  btUnpay.innerText = "Return";
+  row.classList.remove("book_reserved");
+  row.classList.add("book_paid");
+<% end %>
