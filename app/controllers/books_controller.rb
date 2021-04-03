@@ -31,15 +31,19 @@ class BooksController < ApplicationController
     
     respond_to do |format|
       if @book.save
-        format.js { render nothing: true, notice: 'Book was successfully reserved.' }
+        format.js
       end
     end
   end
 
   def pay
+    @book.paid!
+    @book.save
   end
 
   def unpay
+    @book.unreserved!
+    @book.save
   end
 
   # POST /books or /books.json
