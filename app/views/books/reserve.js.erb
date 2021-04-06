@@ -53,7 +53,7 @@ function createRequest(url, method = 'get') {
 }
 
 function setupTimer() {
-  timeout = 15000;
+  timeout = 120000;
   displayTimer(timeout);
   txtTimeout.innerText = getTimeString(timeout / 1000);
 
@@ -76,13 +76,7 @@ txtState.innerText = "<%= @book.state %>";
 txtUser.innerText = "<%= @book.user %>";
 
 // refresh texts and show/hide nodes based on status
-<% if @book.unreserved? %>
-  txtTimeout.innerText = "";
-  btReserve.innerText = "Reserve";
-  row.classList.remove("book_reserved");
-  btPay.innerText = "";
-  btUnpay.innerText = "";
-<% elsif @book.reserved? %>
+<% if @book.reserved? %>
   btReserve.innerText = "";
   row.classList.add("book_reserved");
   btPay.innerText = "Pay";
