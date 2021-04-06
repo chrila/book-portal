@@ -37,34 +37,40 @@ class BooksController < ApplicationController
   end
 
   def unreserve
-    if @book.reserved?
-      @book.unreserved!
-      @book.user = nil
-    end
-    
-    respond_to do |format|
-      if @book.save
-        format.js
+    if @book.user == current_user
+      if @book.reserved?
+        @book.unreserved!
+        @book.user = nil
+      end
+      
+      respond_to do |format|
+        if @book.save
+          format.js
+        end
       end
     end
   end
 
   def pay
-    @book.paid!
+    if @book.user == current_user
+      @book.paid!
 
-    respond_to do |format|
-      if @book.save
-        format.js
+      respond_to do |format|
+        if @book.save
+          format.js
+        end
       end
     end
   end
 
   def unpay
-    @book.unreserved!
+    if @book.user == current_user
+      @book.unreserved!
 
-    respond_to do |format|
-      if @book.save
-        format.js
+      respond_to do |format|
+        if @book.save
+          format.js
+        end
       end
     end
   end
