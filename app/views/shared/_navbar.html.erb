@@ -1,0 +1,13 @@
+<div class="navbar">
+  <%= link_to 'Book portal', root_path, class: 'navbar-header' %>
+  <span class="navbar-separator"></span>
+  <span class="navbar-group-right">
+    <% if signed_in? %>
+      <%= link_to 'My profile', edit_user_registration_path, class: 'navbar-link' %>
+      <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'navbar-link' %>
+    <% else %>    
+      <%= link_to 'Sign in', new_user_session_path, class: 'navbar-link' %>
+      <%= link_to 'Sign up', new_user_registration_path, class: 'navbar-link' %>
+    <% end %>
+  </span>
+</div>
